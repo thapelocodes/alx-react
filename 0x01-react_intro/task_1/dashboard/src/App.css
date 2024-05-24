@@ -1,0 +1,39 @@
+:root {
+  --border: 3.5px solid #e0354b;
+  --padding: 1.2em;
+  --heading-font-size: 1.3rem;
+  --gen-font-size: 1rem;
+}
+
+.App {
+  font-family: Arial, Helvetica, sans-serif;
+  height: 90vh;
+}
+
+.App-header {
+  font-size: var(--heading-font-size);
+  color: #e0354b;
+  display: flex;
+  align-items: center;
+  border-bottom: var(--border);
+}
+
+.App-header img {
+  width: 250px;
+  height: 250px;
+}
+
+.App-body {
+  display: flex;
+  font-size: var(--gen-font-size);
+  padding: calc(var(--padding) * 2);
+  min-height: 48.5%;
+}
+
+.App-footer {
+  font-size: var(--gen-font-size);
+  padding: var(--padding);
+  text-align: center;
+  font-style: italic;
+  border-top: var(--border);
+}
