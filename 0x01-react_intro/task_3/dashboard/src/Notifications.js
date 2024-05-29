@@ -1,9 +1,29 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import "./Notifications.css";
 import closeIcon from "./close-icon.png";
 import { getLatestNotification } from "./utils";
 
 export default function Notifications() {
+  const closeButtonRef = useRef(null);
+
+  useEffect(() => {
+    const closeButton = closeButtonRef.current;
+
+    const handleClick = () => {
+      console.log("Close button has been clicked");
+    };
+
+    if (closeButton) {
+      closeButton.addEventListener("click", handleClick);
+    }
+
+    return () => {
+      if (closeButton) {
+        closeButton.removeEventListener("click", handleClick);
+      }
+    };
+  }, []);
+
   return (
     <div className="Notifications">
       <button
@@ -19,7 +39,7 @@ export default function Notifications() {
           cursor: "pointer",
         }}
         aria-label="Close"
-        onClick={console.log("Close button has been clicked")}
+        ref={closeButtonRef}
       >
         <img src={closeIcon} alt="closeIcon" width="15px" />
       </button>
