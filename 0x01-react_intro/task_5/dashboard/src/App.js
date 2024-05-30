@@ -1,8 +1,9 @@
+import React from "react";
 import logo from "./logo.jpg";
 import "./App.css";
 import { getFooterCopy, getFullYear } from "./utils";
 
-export default function App() {
+function App() {
   return (
     <div className="App">
       <div className="App-header">
@@ -25,3 +26,5 @@ export default function App() {
     </div>
   );
 }
+
+export default App;
