@@ -1,0 +1,10 @@
+.App-body {
+  font-size: var(--gen-font-size);
+  padding: calc(var(--padding) * 2);
+  min-height: 55%;
+}
+
+.App-body label,
+.App-body input {
+  margin-right: 1rem;
+}

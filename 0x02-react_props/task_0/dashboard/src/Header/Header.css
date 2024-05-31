@@ -1,0 +1,12 @@
+.App-header {
+  font-size: var(--heading-font-size);
+  color: #e0354b;
+  display: flex;
+  align-items: center;
+  border-bottom: var(--border);
+}
+
+.App-header img {
+  width: 250px;
+  height: 250px;
+}
