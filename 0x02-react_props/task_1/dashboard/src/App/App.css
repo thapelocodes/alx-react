@@ -1,0 +1,10 @@
+:root {
+  --border: 3.5px solid #e0354b;
+  --padding: 1.2em;
+  --heading-font-size: 1.3rem;
+  --gen-font-size: 1rem;
+}
+
+.App {
+  height: 90vh;
+}
