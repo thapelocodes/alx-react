@@ -35,7 +35,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ["*", ".js", ".jsx"],
+    extensions: [".*", ".js", ".jsx"],
   },
   devServer: {
     static: path.resolve(__dirname, "../dist"),
