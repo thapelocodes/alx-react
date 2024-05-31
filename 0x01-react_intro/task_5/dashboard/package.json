@@ -38,6 +38,9 @@
     "extensionsToTreatAsEsm": [
       ".jsx",
       ".ts"
+    ],
+    "setupFilesAfterEnv": [
+      "./config/setupTests.js"
     ]
   }
 }

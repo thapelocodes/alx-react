@@ -1,4 +1,4 @@
-import { getFullYear, getFooterCopy, getLastNotification } from "./utils";
+import { getFullYear, getFooterCopy, getLatestNotification } from "./utils";
 
 test("Returns the current year", () => {
   expect(getFullYear()).toBe(2024);
@@ -10,7 +10,7 @@ test("Correct footer copy", () => {
 });
 
 test("Returns right notification", () => {
-  expect(getLastNotification()).toBe(
+  expect(getLatestNotification()).toBe(
     "<strong>Urgent requirement</strong> - complete by EOD"
   );
 });
