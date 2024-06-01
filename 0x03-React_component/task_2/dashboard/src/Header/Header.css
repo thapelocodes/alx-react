@@ -1,0 +1,31 @@
+:root {
+  --font-family: Arial, Helvetica, sans-serif;
+  --border-property: solid #da3349 3px;
+  --body-padding: 2rem;
+  --body-font-size: 1.2rem;
+  --footer-font-size: 1.2rem;
+}
+
+/* Header div */
+.App-header {
+  display: flex;
+  align-items: center;
+  border-bottom: var(--border-property);
+}
+
+.App-logo {
+  max-height: 150px;
+  width: auto;
+}
+
+.App-header h1 {
+  color: #da3349;
+  font-size: 2.5rem;
+  font-family: var(--font-family);
+}
+
+
+.App-header img {
+  min-height: 200px;
+  width: 300px;
+}

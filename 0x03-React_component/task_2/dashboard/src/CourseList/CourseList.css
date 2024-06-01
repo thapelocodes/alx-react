@@ -1,0 +1,32 @@
+.table-body {
+  width: 100%;
+  position: relative;
+  border: 1px solid hsla(0, 0%, 0%, 0.205);
+  margin-top: 3rem;
+}
+
+.header-row {
+  border: 1px solid hsla(0, 0%, 0%, 0.205);
+}
+tr {
+  width: 100%;
+}
+
+.thOne, .thTwo, .thThree {
+  border-bottom: 1px solid hsla(0, 0%, 0%, 0.205);
+}
+
+.thOne {
+  text-align: center;
+  margin: 2rem;
+}
+
+.thTwo, .thThree {
+ text-align: left;
+ font-size: 1rem;
+}
+
+.table-padding {
+  padding: 0 2rem;
+  margin-bottom: 20rem;
+}
