@@ -1,0 +1,44 @@
+:root {
+  --font-family: Arial, Helvetica, sans-serif;
+  --border-property: solid #da3349 3px;
+  --body-padding: 2rem;
+  --body-font-size: 1.2rem;
+  --footer-font-size: 1.2rem;
+}
+
+.Notifications {
+  border: 2px dashed #e4384f;
+  padding-left: 5px;
+  padding-top: 0;
+  padding-bottom: 10px;
+  width: 50%;
+  float: right;
+}
+
+.Notifications p,
+.Notifications ul {
+  font-size: 1.2em;
+  font-family: "Times New Roman", Times, serif;
+}
+
+[data-notification-type="default"] {
+  color: blue;
+}
+
+[data-urgent],
+[data-notification-type="urgent"] {
+  color: red;
+}
+
+.menuItem {
+  font-size: var(--body-font-size);
+  margin-top: -0.9rem;
+  text-align: right;
+}
+
+.flex-area {
+  width: 70%;
+  right: 0;
+  position: absolute;
+  padding-right: 20px;
+}
