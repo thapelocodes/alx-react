@@ -1,0 +1,16 @@
+:root {
+  --font-family: Arial, Helvetica, sans-serif;
+  --border-property: solid #da3349 3px;
+  --body-padding: 2rem;
+  --body-font-size: 1.2rem;
+  --footer-font-size: 1.2rem;
+}
+
+/* Footer */
+.App-footer {
+  border-top: var(--border-property);
+  text-align: center;
+  font-size: var(--footer-font-size);
+  font-family: Arial, Helvetica, sans-serif;
+  height: 100px;
+}
