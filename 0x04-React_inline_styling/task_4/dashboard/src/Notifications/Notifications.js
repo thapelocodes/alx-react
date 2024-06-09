@@ -8,12 +8,53 @@ import NotificationItemShape from "./NotificationItemShape";
 class Notifications extends Component {
   constructor(props) {
     super(props);
-
+    this.state = {
+      displayDrawer: this.props.displayDrawer,
+    };
+    this.notifButtonRef = React.createRef();
+    this.menuItemRef = React.createRef();
+    this.handleClick = this.handleClick.bind(this);
     this.markAsRead = this.markAsRead.bind(this);
   }
 
-  shouldComponentUpdate(nextProps) {
-    return nextProps.length > this.props.listNotifications.length;
+  componentDidMount() {
+    const notifButton = this.notifButtonRef.current;
+    const menuItem = this.menuItemRef.current;
+
+    if (notifButton) {
+      notifButton.addEventListener("click", this.handleClick);
+    }
+
+    if (menuItem) {
+      menuItem.addEventListener("click", this.handleClick);
+    }
+  }
+
+  componentWillUnmount() {
+    const notifButton = this.notifButtonRef.current;
+    const menuItem = this.menuItemRef.current;
+
+    if (notifButton) {
+      notifButton.removeEventListener("click", this.handleClick);
+    }
+
+    if (menuItem) {
+      menuItem.removeEventListener("click", this.handleClick);
+    }
+  }
+
+  handleClick() {
+    this.setState((prevState) => ({
+      displayDrawer: !prevState.displayDrawer,
+    }));
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return (
+      nextProps.listNotifications.length >
+        this.props.listNotifications.length ||
+      nextState.displayDrawer !== this.state.displayDrawer
+    );
   }
 
   markAsRead(id) {
@@ -23,13 +64,14 @@ class Notifications extends Component {
   render() {
     return (
       <React.Fragment>
-        {!this.props.displayDrawer ? (
-          <div className={css(styles.menuItem)}>
+        {!this.state.displayDrawer ? (
+          <div className={css(styles.menuItem)} ref={this.menuItemRef}>
             <p>Your notifications</p>
           </div>
         ) : (
           <div className={css(styles.Notifications)}>
             <button
+              id="notifButton"
               style={{
                 color: "#3a3a3a",
                 fontWeight: "bold",
@@ -43,17 +85,31 @@ class Notifications extends Component {
                 outline: "none",
               }}
               aria-label="Close"
-              onClick={(e) => {
-                console.log("Close button has been clicked");
-              }}
+              ref={this.notifButtonRef}
             >
               <img src={closeIcon} alt="close icon" width="10px" />
             </button>
-            {this.props.listNotifications.length != 0 ? <p>Here is the list of notifications</p> : null}
+            {this.props.listNotifications.length !== 0 ? (
+              <p>Here is the list of notifications</p>
+            ) : null}
             <ul>
-              {this.props.listNotifications.length == 0 ? <NotificationItem type="default" value="No new notification for now" /> : null}
+              {this.props.listNotifications.length === 0 ? (
+                <NotificationItem
+                  type="default"
+                  value="No new notification for now"
+                />
+              ) : null}
               {this.props.listNotifications.map((val, idx) => {
-                return <NotificationItem type={val.type} value={val.value} html={val.html} key={val.id} markAsRead={this.markAsRead} id={val.id} />;
+                return (
+                  <NotificationItem
+                    type={val.type}
+                    value={val.value}
+                    html={val.html}
+                    key={val.id}
+                    markAsRead={this.markAsRead}
+                    id={val.id}
+                  />
+                );
               })}
             </ul>
           </div>
