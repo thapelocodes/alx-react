@@ -180,8 +180,8 @@ const styles = StyleSheet.create({
 Notifications.propTypes = {
   displayDrawer: PropTypes.bool,
   listNotifications: PropTypes.arrayOf(NotificationItemShape),
-  handleDisplayDrawer: PropTypes.func.isRequired,
-  handleHideDrawer: PropTypes.func.isRequired,
+  handleDisplayDrawer: PropTypes.func, //.isRequired,
+  handleHideDrawer: PropTypes.func, //.isRequired,
 };
 
 Notifications.defaultProps = {
