@@ -39,13 +39,13 @@ describe("Notification tests", () => {
       expect(node.equals(<NotificationItem />));
     });
     expect(wrapper.find("ul").childAt(0).html()).toEqual(
-      '<li class="default_1tsdo2i" data-notification-type="default">New course available</li>'
+      '<li class="default_2c02es" data-notification-type="default">New course available</li>'
     );
     expect(wrapper.find("ul").childAt(1).html()).toEqual(
-      '<li class="urgent_137u7ef" data-notification-type="urgent">New resume available</li>'
+      '<li class="urgent_cyonix" data-notification-type="urgent">New resume available</li>'
     );
     expect(wrapper.find("ul").childAt(2).html()).toEqual(
-      `<li data-urgent=\"true\" class=\"urgent_137u7ef\">${getLatestNotification()}</li>`
+      `<li data-urgent=\"true\" class=\"urgent_cyonix\">${getLatestNotification()}</li>`
     );
   });
 
@@ -157,9 +157,12 @@ describe("Notification tests", () => {
       />
     );
 
-    expect(wrapper.instance().shouldComponentUpdate(listNotifications)).toBe(
-      false
-    );
+    const shouldUpdate = wrapper.instance().shouldComponentUpdate({
+      ...wrapper.instance().props,
+      listNotifications: listNotifications,
+    });
+
+    expect(shouldUpdate).toBe(false);
   });
 
   it("re-renders if listNotifications if listNotifications is changed", () => {

@@ -39,11 +39,26 @@ class Notifications extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return (
-      nextProps.listNotifications.length >
-        this.props.listNotifications.length ||
-      nextProps.displayDrawer !== this.props.displayDrawer
-    );
+    if (JSON.stringify(this.props) !== JSON.stringify(nextProps)) {
+      return true;
+    }
+    if (nextProps.displayDrawer !== this.props.displayDrawer) {
+      return true;
+    }
+
+    if (
+      nextProps.listNotifications.length !== this.props.listNotifications.length
+    ) {
+      return true;
+    }
+
+    for (let i = 0; i < nextProps.listNotifications.length; i++) {
+      if (nextProps.listNotifications[i] !== this.props.listNotifications[i]) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   markAsRead(id) {
@@ -187,6 +202,8 @@ Notifications.propTypes = {
 Notifications.defaultProps = {
   displayDrawer: false,
   listNotifications: [],
+  // handleDisplayDrawer: () => {},
+  // handleHideDrawer: () => {},
 };
 
 export default Notifications;
