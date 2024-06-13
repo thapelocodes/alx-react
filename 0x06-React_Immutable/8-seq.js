@@ -15,6 +15,6 @@ export default function printBestStudents(object) {
     return obj[student];
   });
 
-  console.log(obj);
+  console.log(obj);// eslint-disable-line no-console
 }
 
