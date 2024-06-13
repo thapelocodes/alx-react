@@ -1,4 +1,5 @@
-import { Seq } from "immutable";
+/*eslint "no-console": "off"*/
+import { Seq } from 'immutable';
 
 export default function printBestStudents(object) {
   const obj = Seq(object)
@@ -15,6 +16,6 @@ export default function printBestStudents(object) {
     return obj[student];
   });
 
-  console.log(obj);// eslint-disable-line
+  console.log(obj);
 }
 
