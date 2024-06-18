@@ -13,3 +13,8 @@ export function unSelectCourse(index) {
     index: index,
   };
 }
+
+export const boundSelectCourse = (index) => (dispatch) =>
+  dispatch(selectCourse(index));
+export const boundUnSelectCourse = (index) => (dispatch) =>
+  dispatch(unSelectCourse(index));
