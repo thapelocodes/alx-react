@@ -3,10 +3,14 @@ import { normalize, schema } from "normalizr";
 
 const user = new schema.Entity("users");
 const message = new schema.Entity("messages", {}, { idAttribute: "guid" });
-const notification = new schema.Entity("notifications", {
-  author: user,
-  context: message,
-});
+const notification = new schema.Entity(
+  "notifications",
+  {
+    author: user,
+    context: message,
+  },
+  { processStrategy: (value) => ({ ...value, isRead: false }) }
+);
 
 export const normalized = normalize(notificationData, [notification]);
 
@@ -25,5 +29,6 @@ export default function getAllNotificationsByUser(userId) {
 }
 
 export function notificationsNormalizer(data) {
-  return normalize(data, [notification]);
+  const normalized = normalize(data, [notification]);
+  return normalized.entities.notifications;
 }
