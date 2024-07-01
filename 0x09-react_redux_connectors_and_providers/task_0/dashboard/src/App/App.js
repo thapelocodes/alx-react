@@ -10,6 +10,7 @@ import { StyleSheet, css } from "aphrodite";
 import PropTypes from "prop-types";
 import { getLatestNotification } from "../utils/utils";
 import { AppContext, logOut, user } from "./AppContext";
+import { connect } from "react-redux";
 
 class App extends React.Component {
   constructor(props) {
@@ -151,4 +152,6 @@ App.propTypes = {
   logOut: PropTypes.func,
 };
 
-export default App;
+const mapStateToProps = (state) => ({ isLoggedIn: state.ui.isLoggedIn });
+
+export default connect(mapStateToProps)(App);
