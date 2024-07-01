@@ -152,6 +152,8 @@ App.propTypes = {
   logOut: PropTypes.func,
 };
 
-export const mapStateToProps = (state) => ({ isLoggedIn: state.ui.isLoggedIn });
+export const mapStateToProps = (state) => ({
+  isLoggedIn: state.uiReducer.get("isUserLoggedIn"),
+});
 
 export default connect(mapStateToProps)(App);
