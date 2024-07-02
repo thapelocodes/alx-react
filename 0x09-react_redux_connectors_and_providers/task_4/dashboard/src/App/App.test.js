@@ -1,3 +1,4 @@
+// App/App.test.js
 /**
  * @jest-environment jsdom
  */
@@ -12,6 +13,8 @@ import CourseList from "../CourseList/CourseList";
 import { StyleSheetTestUtils } from "aphrodite";
 import { fromJS } from "immutable";
 import { mapStateToProps } from "./App";
+import { combineReducers, createStore } from "redux";
+import rootReducer from "../reducers/rootReducer"; // Import your rootReducer
 
 beforeEach(() => {
   StyleSheetTestUtils.suppressStyleInjection();
@@ -24,44 +27,52 @@ describe("rendering components", () => {
   let wrapper;
 
   it("renders App component without crashing", () => {
-    wrapper = shallow(<App isLoggedIn={false} />);
+    const store = createStore(rootReducer); // Create store with rootReducer
+    wrapper = shallow(<App isLoggedIn={false} store={store} />); // Pass store as prop
     expect(wrapper.exists()).toBe(true);
   });
 
   it("contains Notifications component", () => {
-    wrapper = shallow(<App isLoggedIn={false} />);
+    const store = createStore(rootReducer);
+    wrapper = shallow(<App isLoggedIn={false} store={store} />);
     expect(wrapper.find(Notifications)).toHaveLength(1);
   });
 
   it("contains Header component", () => {
-    wrapper = shallow(<App isLoggedIn={false} />);
+    const store = createStore(rootReducer);
+    wrapper = shallow(<App isLoggedIn={false} store={store} />);
     expect(wrapper.find(Header)).toHaveLength(1);
   });
 
   it("contains Login component", () => {
-    wrapper = shallow(<App isLoggedIn={false} />);
+    const store = createStore(rootReducer);
+    wrapper = shallow(<App isLoggedIn={false} store={store} />);
     expect(wrapper.find(Login)).toHaveLength(1);
   });
 
   it("contains Footer component", () => {
-    wrapper = shallow(<App isLoggedIn={false} />);
+    const store = createStore(rootReducer);
+    wrapper = shallow(<App isLoggedIn={false} store={store} />);
     expect(wrapper.find(Footer)).toHaveLength(1);
   });
 
   it("checks CourseList is not rendered", () => {
-    wrapper = shallow(<App isLoggedIn={false} />);
+    const store = createStore(rootReducer);
+    wrapper = shallow(<App isLoggedIn={false} store={store} />);
     expect(wrapper.find(CourseList)).toHaveLength(0);
   });
 
   it("checks CourseList is rendered when isLoggedIn is true", () => {
-    wrapper = shallow(<App isLoggedIn={true} />);
+    const store = createStore(rootReducer);
+    wrapper = shallow(<App isLoggedIn={true} store={store} />);
     expect(wrapper.find(CourseList)).toHaveLength(1);
   });
 });
 
 describe("markNotificationAsRead works as intended", () => {
   it("markNotificationAsRead deletes the notifications with the id passed", () => {
-    const wrapper = shallow(<App isLoggedIn={true} />);
+    const store = createStore(rootReducer);
+    const wrapper = shallow(<App isLoggedIn={true} store={store} />);
     wrapper.setState({
       listNotifications: [
         { id: 1, type: "default", value: "New course available" },
@@ -82,19 +93,15 @@ describe("markNotificationAsRead works as intended", () => {
 
 describe("Tests mapStateToProps", () => {
   it("verifies that the function returns the right object when passing the state", () => {
-    let state = fromJS({
-      isUserLoggedIn: true,
-      isNotificationDrawerVisible: true,
-    });
+    const store = createStore(rootReducer);
+    let state = store.getState(); // Get the current state from the store
     const props = mapStateToProps(state);
     expect(props).toEqual({ isLoggedIn: true, displayDrawer: true });
   });
 
   it("verifies that the function returns the right object when passing the state", () => {
-    let state = fromJS({
-      isUserLoggedIn: false,
-      isNotificationDrawerVisible: false,
-    });
+    const store = createStore(rootReducer);
+    let state = store.getState(); // Get the current state from the store
     const props = mapStateToProps(state);
     expect(props).toEqual({ isLoggedIn: false, displayDrawer: false });
   });
