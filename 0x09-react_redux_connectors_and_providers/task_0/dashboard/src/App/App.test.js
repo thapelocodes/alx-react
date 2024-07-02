@@ -11,6 +11,11 @@ import CourseList from "../CourseList/CourseList";
 import { shallow, mount } from "enzyme";
 import { StyleSheetTestUtils } from "aphrodite";
 import { AppContext, user, logOut } from "./AppContext";
+import { fromJS } from "immutable";
+import { mapStateToProps } from "./App";
+import { Provider } from "react-redux";
+import configureStore from "redux-mock-store";
+import uiReducer from "../reducers/uiReducer";
 
 beforeEach(() => {
   StyleSheetTestUtils.suppressStyleInjection();
@@ -19,44 +24,73 @@ afterEach(() => {
   StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
 });
 
+const mockStore = configureStore([]);
+
+const TestWrapper = ({ children, store, contextValue }) => (
+  <Provider store={store}>
+    <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>
+  </Provider>
+);
+
 describe("rendering components", () => {
+  let store;
+  let wrapper;
+
+  beforeEach(() => {
+    store = mockStore({
+      uiReducer: fromJS({ isUserLoggedIn: false }),
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <App />
+      </Provider>
+    );
+  });
+  afterEach(() => wrapper.unmount());
+
   it("renders App component without crashing", () => {
-    const wrapper = shallow(<App />);
     expect(wrapper.exists()).toBe(true);
   });
 
   it("contains Notifications component", () => {
-    const wrapper = shallow(<App />);
     expect(wrapper.find(Notifications)).toHaveLength(1);
   });
 
   it("contains Header component", () => {
-    const wrapper = shallow(<App />);
     expect(wrapper.contains(<Header />)).toBe(true);
   });
 
   it("contains Login component", () => {
-    const wrapper = shallow(<App />);
     expect(wrapper.find(Login)).toHaveLength(1);
   });
 
   it("contains Footer component", () => {
-    const wrapper = shallow(<App />);
     expect(wrapper.contains(<Footer />)).toBe(true);
   });
 
   it("checks CourseList is not rendered", () => {
-    const wrapper = shallow(<App />);
     expect(wrapper.contains(<CourseList />)).toBe(false);
   });
 });
 
 describe("when isLogged in is true", () => {
-  const wrapper = shallow(<App />);
-  expect(wrapper.state().user).toEqual(user);
+  let store;
+  let wrapper;
+
+  beforeEach(() => {
+    store = mockStore({
+      uiReducer: fromJS({ isUserLoggedIn: true }),
+    });
+    wrapper = mount(
+      <Provider store={store}>
+        <App />
+      </Provider>
+    );
+  });
 
   it("checks Login is not rendered", () => {
     expect(wrapper.contains(<Login />)).toBe(false);
+    expect(wrapper.find(CourseList)).toHaveLength(0);
   });
 
   it("checks CourseList is rendered", () => {
@@ -64,10 +98,10 @@ describe("when isLogged in is true", () => {
   });
 
   it(`Tests that the logIn function updates user's state correctly`, () => {
-    const wrapper = mount(
-      <AppContext.Provider value={{ user, logOut }}>
+    const app = mount(
+      <TestWrapper store={store} contextValue={{ user, logOut }}>
         <App />
-      </AppContext.Provider>
+      </TestWrapper>
     );
 
     const myUser = {
@@ -76,18 +110,19 @@ describe("when isLogged in is true", () => {
       isLoggedIn: true,
     };
 
-    expect(wrapper.state().user).toEqual(user);
-    const instance = wrapper.instance();
+    expect(app.state().user).toEqual(user);
+    const instance = app.instance();
     instance.logIn(myUser.email, myUser.password);
-    expect(wrapper.state().user).toEqual(myUser);
-    wrapper.unmount();
+    app.update();
+    expect(app.state().user).toEqual(myUser);
+    app.unmount();
   });
 
   it(`Tests that the logOut function updates user's state correctly`, () => {
-    const wrapper = mount(
-      <AppContext.Provider value={{ user, logOut }}>
+    const app = mount(
+      <TestWrapper store={store} contextValue={{ user, logOut }}>
         <App />
-      </AppContext.Provider>
+      </TestWrapper>
     );
 
     const myUser = {
@@ -96,29 +131,42 @@ describe("when isLogged in is true", () => {
       isLoggedIn: true,
     };
 
-    expect(wrapper.state().user).toEqual(user);
-    const instance = wrapper.instance();
+    expect(app.state().user).toEqual(user);
+    const instance = app.instance();
     instance.logOut();
-    expect(wrapper.state().user).toEqual(user);
-    wrapper.unmount();
+    expect(app.state().user).toEqual(user);
+    app.unmount();
   });
 });
 
 describe("testing state of App.js", () => {
+  let store;
+  let wrapper;
+
+  beforeEach(() => {
+    store = mockStore({ uiReducer: fromJS({ isUserLoggedIn: false }) });
+    wrapper = mount(
+      <Provider store={store}>
+        <App />
+      </Provider>
+    );
+  });
+
+  afterEach(() => wrapper.unmount());
+
   it("displayDrawer initial value should be set to false", () => {
-    const wrapper = mount(<App />);
     expect(wrapper.state().displayDrawer).toBe(false);
   });
 
   it("should set displayDrawer to true after calling handleDisplayDrawer", () => {
-    const wrapper = shallow(<App />);
     wrapper.instance().handleDisplayDrawer();
+    wrapper.update();
     expect(wrapper.state().displayDrawer).toBe(true);
   });
 
   it("should set displayDrawer to false after calling handleHideDrawer", () => {
-    const wrapper = shallow(<App />);
     wrapper.instance().handleHideDrawer();
+    wrapper.update();
     expect(wrapper.state().displayDrawer).toBe(false);
   });
 });
@@ -138,12 +186,14 @@ describe("markNotificationAsRead works as intended", () => {
     };
 
     const wrapper = mount(
-      <AppContext.Provider value={context}>
+      <TestWrapper store={store} contextValue={{ user, logOut }}>
         <App />
-      </AppContext.Provider>
+      </TestWrapper>
     );
 
     wrapper.instance().markNotificationAsRead(3);
+    wrapper.update();
+
     expect(wrapper.state().listNotifications).toEqual([
       { id: 1, type: "default", value: "New course available" },
       { id: 2, type: "urgent", value: "New resume available" },
@@ -151,5 +201,19 @@ describe("markNotificationAsRead works as intended", () => {
     expect(wrapper.state().listNotifications.length).toBe(2);
     expect(wrapper.state().listNotifications[3]).toBe(undefined);
     wrapper.unmount();
+  });
+});
+
+describe("Tests mapStateToProps.", () => {
+  it("verifies that the function returns the right object when passing the state.", () => {
+    let state = fromJS({ isUserLoggedIn: true });
+    const props = mapStateToProps(state);
+    expect(props).toEqual({ isLoggedIn: true });
+  });
+
+  it("verifies that the function returns the right object when passing the state.", () => {
+    let state = fromJS({ isUserLoggedIn: false });
+    const props = mapStateToProps(state);
+    expect(props).toEqual({ isLoggedIn: false });
   });
 });
