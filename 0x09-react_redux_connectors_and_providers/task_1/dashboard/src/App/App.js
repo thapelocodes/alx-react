@@ -11,6 +11,10 @@ import PropTypes from "prop-types";
 import { getLatestNotification } from "../utils/utils";
 import { AppContext, logOut, user } from "./AppContext";
 import { connect } from "react-redux";
+import {
+  displayNotificationDrawer,
+  hideNotificationDrawer,
+} from "../actions/uiActionCreators";
 
 class App extends React.Component {
   constructor(props) {
@@ -25,8 +29,6 @@ class App extends React.Component {
       ],
     };
     this.handleKeyPress = this.handleKeyPress.bind(this);
-    this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this);
-    this.handleHideDrawer = this.handleHideDrawer.bind(this);
     this.logIn = this.logIn.bind(this);
     this.logOut = this.logOut.bind(this);
     this.markNotificationAsRead = this.markNotificationAsRead.bind(this);
@@ -52,14 +54,6 @@ class App extends React.Component {
 
   componentWillUnmount() {
     document.removeEventListener("keydown", this.handleKeyPress);
-  }
-
-  handleDisplayDrawer() {
-    this.props.dispatch({ displayDrawer: true });
-  }
-
-  handleHideDrawer() {
-    this.props.dispatch({ displayDrawer: false });
   }
 
   logIn(email, password) {
@@ -100,8 +94,8 @@ class App extends React.Component {
                 markNotificationAsRead={this.markNotificationAsRead}
                 listNotifications={this.listNotifications}
                 displayDrawer={this.props.displayDrawer}
-                handleDisplayDrawer={this.handleDisplayDrawer}
-                handleHideDrawer={this.handleHideDrawer}
+                handleDisplayDrawer={this.props.handleDisplayDrawer}
+                handleHideDrawer={this.props.handleHideDrawer}
               />
               <Header />
             </div>
@@ -150,6 +144,8 @@ App.propTypes = {
   isLoggedIn: PropTypes.bool,
   logOut: PropTypes.func,
   displayDrawer: PropTypes.bool.isRequired,
+  displayNotificationDrawer: PropTypes.func.isRequired,
+  hideNotificationDrawer: PropTypes.func.isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
@@ -157,5 +153,10 @@ export const mapStateToProps = (state) => ({
   isLoggedIn: state.uiReducer.get("isUserLoggedIn"),
   displayDrawer: state.uiReducer.get("isNotificationDrawerVisible"),
 });
+
+const mapDispatchToProps = {
+  displayNotificationDrawer,
+  hideNotificationDrawer,
+};
 
 export default connect(mapStateToProps)(App);
