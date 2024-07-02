@@ -139,38 +139,6 @@ describe("when isLogged in is true", () => {
   });
 });
 
-describe("testing state of App.js", () => {
-  let store;
-  let wrapper;
-
-  beforeEach(() => {
-    store = mockStore({ uiReducer: fromJS({ isUserLoggedIn: false }) });
-    wrapper = mount(
-      <Provider store={store}>
-        <App />
-      </Provider>
-    );
-  });
-
-  afterEach(() => wrapper.unmount());
-
-  it("displayDrawer initial value should be set to false", () => {
-    expect(wrapper.state().displayDrawer).toBe(false);
-  });
-
-  it("should set displayDrawer to true after calling handleDisplayDrawer", () => {
-    wrapper.instance().handleDisplayDrawer();
-    wrapper.update();
-    expect(wrapper.state().displayDrawer).toBe(true);
-  });
-
-  it("should set displayDrawer to false after calling handleHideDrawer", () => {
-    wrapper.instance().handleHideDrawer();
-    wrapper.update();
-    expect(wrapper.state().displayDrawer).toBe(false);
-  });
-});
-
 describe("markNotificationAsRead works as intended", () => {
   it("markNotificationAsRead deletes the notifications with the id passed", () => {
     const context = {
@@ -206,14 +174,20 @@ describe("markNotificationAsRead works as intended", () => {
 
 describe("Tests mapStateToProps.", () => {
   it("verifies that the function returns the right object when passing the state.", () => {
-    let state = fromJS({ isUserLoggedIn: true });
+    let state = fromJS({
+      isUserLoggedIn: true,
+      isNotificationDrawerVisible: true,
+    });
     const props = mapStateToProps(state);
-    expect(props).toEqual({ isLoggedIn: true });
+    expect(props).toEqual({ isLoggedIn: true, displayDrawer: true });
   });
 
   it("verifies that the function returns the right object when passing the state.", () => {
-    let state = fromJS({ isUserLoggedIn: false });
+    let state = fromJS({
+      isUserLoggedIn: false,
+      isNotificationDrawerVisible: false,
+    });
     const props = mapStateToProps(state);
-    expect(props).toEqual({ isLoggedIn: false });
+    expect(props).toEqual({ isLoggedIn: false, displayDrawer: false });
   });
 });
